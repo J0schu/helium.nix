@@ -1,6 +1,6 @@
 # helium.nix
 
-![Helium Version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/J0schu/helium.nix/main/version.json)
+![Helium Version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/J0schu/helium.nix/master/version.json)
 ![Build Status](https://github.com/J0schu/helium.nix/actions/workflows/update.yml/badge.svg)
 
 A Nix flake for the [Helium](https://github.com/imputnet/helium-linux) browser.
