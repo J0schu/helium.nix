@@ -44,6 +44,26 @@ jobs:
             echo "updated=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Verify GPG Signature
+        if: steps.update.outputs.updated == 'true'
+        run: |
+          echo "importing Helium public GPG key"
+          gpg --import .github/workflows/helium-pubkey.asc
+
+          VERSION="${{ steps.update.outputs.new_version }}"
+          FILE="helium-${VERSION}-x86_64.AppImage"
+
+          echo "downloading AppImage and its signature file"
+          curl -sL "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/${FILE}" -o "$FILE"
+          curl -sL "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/${FILE}.asc" -o "${FILE}.asc"
+
+          echo "Checking cryptographic signature..."
+          if ! gpg --verify "${FILE}.asc" "$FILE"; then
+            echo "ERROR: GPG signature verification failed!"
+            exit 1
+          fi
+          echo "GPG signature verified successfully!"
+
       - name: Verify Build
         if: steps.update.outputs.updated == 'true'
         run: |
