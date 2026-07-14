@@ -79,4 +79,8 @@ jobs:
           
           git add flake.nix version.json
           git commit -m "chore: update helium browser to ${{ steps.update.outputs.new_version }}"
-          git push
+
+          TAG="v${{ steps.update.outputs.new_version }}"
+          git tag $TAG
+
+          git push origin master --follow-tags
