@@ -81,6 +81,7 @@ jobs:
           git commit -m "chore: update helium browser to ${{ steps.update.outputs.new_version }}"
           git push
 
-          TAG="v${{ steps.update.outputs.new_version }}"
-          git tag $TAG
-          git push origin $TAG
+          RAW_VERSION="${{ steps.update.outputs.new_version }}"
+          SEMVER_TAG=$(echo $RAW_VERSION | sed 's/\.\([0-9]*\)$/-\1/')
+          git tag $SEMVER_TAG
+          git push origin $SEMVER_TAG
