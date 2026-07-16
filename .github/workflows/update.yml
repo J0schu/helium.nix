@@ -44,7 +44,7 @@ jobs:
             echo "updated=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Verify AppImage Artifact Attestation
+      - name: Verify AppImage
         if: steps.update.outputs.updated == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,11 +52,12 @@ jobs:
           VERSION="${{ steps.update.outputs.new_version }}"
           FILE="helium-${VERSION}-x86_64.AppImage"
 
-          curl -sLf "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/${FILE}" -o "$FILE"
-          curl -sLf "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/attestation.json" -o "attestation.json"
+          gh release download "$VERSION" \
+            --pattern "$FILE" \
+            --repo imputnet/helium-linux
 
-          if ! gh attestation verify "$FILE" --bundle "attestation.json" --repo "imputnet/helium-linux"; then
-            echo "ERROR: attestation failed"
+          if ! gh release verify-asset "$VERSION" "$FILE" --repo imputnet/helium-linux; then
+            echo "ERROR: verify-asset failed"
             exit 1
           fi
 
