@@ -53,8 +53,9 @@ jobs:
           FILE="helium-${VERSION}-x86_64.AppImage"
 
           curl -sLf "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/${FILE}" -o "$FILE"
+          curl -sLf "https://github.com/imputnet/helium-linux/releases/download/${VERSION}/attestation.json" -o "attestation.json"
 
-          if ! gh attestation verify "$FILE" --repo "imputnet/helium-linux"; then
+          if ! gh attestation verify "$FILE" --bundle "attestation.json" --repo "imputnet/helium-linux"; then
             echo "ERROR: attestation failed"
             exit 1
           fi
