@@ -8,7 +8,7 @@ A Nix flake for the [Helium](https://github.com/imputnet/helium) browser.
 
 ## Features
 
-- automatic updates (GPG-verified)
+- automatic updates (gh attestation)
 - uses the official AppImage
 - desktop entry and icon installation
 
