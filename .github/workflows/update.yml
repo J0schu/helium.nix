@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
 
     steps:
       - name: Checkout repository
@@ -69,6 +70,7 @@ jobs:
           echo "Build successful!"
           
       - name: Commit and Push Changes
+        id: commit
         if: steps.update.outputs.updated == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -77,8 +79,15 @@ jobs:
           git add flake.nix version.json
           git commit -m "chore: update helium browser to ${{ steps.update.outputs.new_version }}"
           git push
-
           RAW_VERSION="${{ steps.update.outputs.new_version }}"
-          SEMVER_TAG=$(echo $RAW_VERSION | sed 's/\.\([0-9]*\)$/-\1/')
+          SEMVER_TAG="v$(echo $RAW_VERSION | sed 's/\.\([0-9]*\)$/-\1/')"
           git tag $SEMVER_TAG
           git push origin $SEMVER_TAG
+          echo "semver_tag=$SEMVER_TAG" >> $GITHUB_OUTPUT
+
+      - name: Trigger FlakeHub publish
+        if: steps.update.outputs.updated == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run "Publish to FlakeHub" -f tag="${{ steps.commit.outputs.semver_tag }}"
