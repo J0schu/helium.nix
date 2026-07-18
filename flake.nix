@@ -34,8 +34,7 @@
         extraInstallCommands = ''
           install -m 444 -D ${contents}/${pname}.desktop $out/share/applications/${pname}.desktop
           
-          substituteInPlace $out/share/applications/${pname}.desktop \
-            --replace 'Exec=AppRun' 'Exec=helium'
+          substituteInPlace $out/share/applications/${pname}.desktop
 
           cp -r ${contents}/usr/share/icons $out/share/
         '';
