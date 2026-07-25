@@ -10,8 +10,8 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
-      version = "0.14.8.2";
-      hash = "sha256-7Kde6Crsr6LdKnfER+6yE7JkU6+10xXtJ1GQEHhBtqg=";
+      version = "0.14.9.1";
+      hash = "sha256-cuQiMGhOPjE7ixuZiFGpRuGF9SdVcNPYUXSXhjZBLKQ=";
       pname = "helium";
 
       contents = pkgs.appimageTools.extract {
